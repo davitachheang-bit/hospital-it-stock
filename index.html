@@ -1789,11 +1789,31 @@ const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxu7muEgAjwpXg4P1H-
     params.set('action', action);
     params.set('callback', callbackName);
 
+    function encodeUtf8Base64(value) {
+      const bytes = new TextEncoder().encode(value);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      return btoa(binary);
+    }
+
+    function isTelegramInitData(value) {
+      const s = String(value == null ? '' : value);
+      return s.indexOf('auth_date=') >= 0 && s.indexOf('hash=') >= 0;
+    }
+
     args.forEach(function(arg, i) {
       if (typeof arg === 'object' && arg !== null) {
         params.set('arg' + i, JSON.stringify(arg));
       } else {
-        params.set('arg' + i, String(arg == null ? '' : arg));
+        const value = String(arg == null ? '' : arg);
+        // Preserve Telegram initData byte-for-byte while transporting it
+        // through the Apps Script query-string layer.
+        params.set(
+          'arg' + i,
+          isTelegramInitData(value)
+            ? '__TG_B64__:' + encodeUtf8Base64(value)
+            : value
+        );
       }
     });
 
