@@ -1,0 +1,4222 @@
+<!DOCTYPE html>
+
+<html>
+
+
+
+<head>
+
+
+
+  <base target="_self">
+
+
+
+  <meta name="viewport"
+
+        content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  <title>Hospital IT Stock</title>
+
+
+
+  <!-- Telegram Mini App -->
+
+  <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+
+
+
+  <style>
+
+
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+
+
+    body {
+
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      background: #f3f6f4;
+
+      color: #1f2937;
+
+    }
+
+
+
+    button,
+
+    input,
+
+    select,
+
+    textarea {
+
+      font: inherit;
+
+    }
+
+
+
+    button {
+
+      cursor: pointer;
+
+    }
+
+
+
+    .topbar {
+
+      height: 62px;
+
+      background: #126b2c;
+
+      color: white;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      padding: 0 22px;
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 20;
+
+    }
+
+
+
+    .brand {
+
+      font-size: 20px;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .user-info {
+
+      font-size: 13px;
+
+      text-align: right;
+
+    }
+
+
+
+    .layout {
+
+      display: flex;
+
+      min-height: calc(100vh - 62px);
+
+    }
+
+
+
+    .sidebar {
+
+      width: 220px;
+
+      background: white;
+
+      border-right: 1px solid #ddd;
+
+      padding: 15px;
+
+    }
+
+
+
+    .nav-btn {
+
+      width: 100%;
+
+      border: 0;
+
+      background: transparent;
+
+      text-align: left;
+
+      padding: 12px;
+
+      border-radius: 8px;
+
+      margin-bottom: 5px;
+
+      color: #374151;
+
+    }
+
+
+
+    .nav-btn:hover,
+
+    .nav-btn.active {
+
+      background: #e7f5eb;
+
+      color: #126b2c;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .main {
+
+      flex: 1;
+
+      padding: 22px;
+
+      max-width: 1400px;
+
+      margin: auto;
+
+      width: 100%;
+
+    }
+
+
+
+    .page-title {
+
+      margin: 0 0 18px;
+
+      font-size: 25px;
+
+    }
+
+
+
+    .cards {
+
+      display: grid;
+
+      grid-template-columns:
+
+        repeat(auto-fit, minmax(180px, 1fr));
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+
+    .card {
+
+      background: white;
+
+      border-radius: 12px;
+
+      padding: 18px;
+
+      border: 1px solid #e5e7eb;
+
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+
+    }
+
+
+
+    .card-title {
+
+      color: #6b7280;
+
+      font-size: 13px;
+
+    }
+
+
+
+    .card-value {
+
+      font-size: 28px;
+
+      font-weight: 700;
+
+      margin-top: 7px;
+
+    }
+
+
+
+    .panel {
+
+      background: white;
+
+      border-radius: 12px;
+
+      border: 1px solid #e5e7eb;
+
+      padding: 20px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+
+    .panel h3 {
+
+      margin-top: 0;
+
+    }
+
+
+
+    .form-grid {
+
+      display: grid;
+
+      grid-template-columns:
+
+        repeat(auto-fit, minmax(220px, 1fr));
+
+      gap: 14px;
+
+    }
+
+
+
+    .field {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+
+    }
+
+
+
+    .field.full {
+
+      grid-column: 1 / -1;
+
+    }
+
+
+
+    label {
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+    }
+
+
+
+    input,
+
+    select,
+
+    textarea {
+
+      width: 100%;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 8px;
+
+      padding: 10px 11px;
+
+      background: white;
+
+    }
+
+
+
+    textarea {
+
+      min-height: 90px;
+
+      resize: vertical;
+
+    }
+
+
+
+    .btn {
+
+      border: 0;
+
+      border-radius: 8px;
+
+      padding: 10px 16px;
+
+      font-weight: 700;
+
+      margin-right: 6px;
+
+      margin-top: 10px;
+
+    }
+
+
+
+    .btn-primary {
+
+      background: #126b2c;
+
+      color: white;
+
+    }
+
+
+
+    .btn-danger {
+
+      background: #dc3545;
+
+      color: white;
+
+    }
+
+
+
+    .btn-warning {
+
+      background: #f59e0b;
+
+      color: white;
+
+    }
+
+
+
+    .btn-secondary {
+
+      background: #6b7280;
+
+      color: white;
+
+    }
+
+
+
+    .btn-success {
+
+      background: #198754;
+
+      color: white;
+
+    }
+
+
+
+    .table-wrap {
+
+      overflow-x: auto;
+
+    }
+
+
+
+    table {
+
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 750px;
+
+    }
+
+
+
+    th,
+
+    td {
+
+      border-bottom: 1px solid #eee;
+
+      padding: 11px 9px;
+
+      text-align: left;
+
+      font-size: 13px;
+
+    }
+
+
+
+    th {
+
+      background: #f8faf9;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .badge {
+
+      display: inline-block;
+
+      padding: 5px 9px;
+
+      border-radius: 20px;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .pending {
+
+      background: #fff3cd;
+
+      color: #856404;
+
+    }
+
+
+
+    .approved {
+
+      background: #d1e7dd;
+
+      color: #0f5132;
+
+    }
+
+
+
+    .rejected {
+
+      background: #f8d7da;
+
+      color: #842029;
+
+    }
+
+
+
+    .low {
+
+      background: #fff3cd;
+
+    }
+
+
+
+    .out {
+
+      background: #f8d7da;
+
+    }
+
+
+
+    .search {
+
+      margin-bottom: 15px;
+
+    }
+
+
+
+    .notice {
+
+      background: #fff8df;
+
+      border: 1px solid #f0d675;
+
+      border-radius: 10px;
+
+      padding: 14px;
+
+      margin-bottom: 18px;
+
+    }
+
+
+
+    .telegram-id {
+
+      font-weight: 700;
+
+      font-size: 17px;
+
+      color: #126b2c;
+
+    }
+
+
+
+    .loading {
+
+      position: fixed;
+
+      inset: 0;
+
+      background: rgba(255,255,255,.85);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      z-index: 100;
+
+      font-size: 18px;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .error-box {
+
+      margin: 20px;
+
+      background: #f8d7da;
+
+      color: #842029;
+
+      padding: 20px;
+
+      border-radius: 12px;
+
+      line-height: 1.6;
+
+    }
+
+
+
+    .empty {
+
+      padding: 25px;
+
+      text-align: center;
+
+      color: #777;
+
+    }
+
+
+
+    .hidden {
+
+      display: none !important;
+
+    }
+
+
+
+    @media(max-width: 750px) {
+
+
+
+      .layout {
+
+        display: block;
+
+      }
+
+
+
+      .sidebar {
+
+        width: 100%;
+
+        display: flex;
+
+        overflow-x: auto;
+
+        border-right: 0;
+
+        border-bottom: 1px solid #ddd;
+
+        padding: 8px;
+
+      }
+
+
+
+      .nav-btn {
+
+        min-width: max-content;
+
+        margin: 0 4px 0 0;
+
+      }
+
+
+
+      .main {
+
+        padding: 14px;
+
+      }
+
+
+
+      .topbar {
+
+        padding: 0 14px;
+
+      }
+
+
+
+      .brand {
+
+        font-size: 17px;
+
+      }
+
+
+
+      .user-info {
+
+        font-size: 11px;
+
+      }
+
+    }
+
+
+
+  </style>
+
+
+
+</head>
+
+
+
+
+
+<body>
+
+
+
+  <div id="loading"
+
+       class="loading">
+
+    Loading Hospital IT Stock...
+
+  </div>
+
+
+
+
+
+  <div id="error"
+
+       class="error-box hidden">
+
+  </div>
+
+
+
+
+
+  <div id="app"
+
+       class="hidden">
+
+
+
+    <div class="topbar">
+
+
+
+      <div class="brand">
+
+        🏥 Hospital IT Stock
+
+      </div>
+
+
+
+      <div class="user-info">
+
+        <div id="userName"></div>
+
+        <div id="userRole"></div>
+
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+    <div class="layout">
+
+
+
+      <aside class="sidebar">
+
+
+
+        <button class="nav-btn active"
+
+                onclick="showPage('dashboard')">
+
+          📊 Dashboard
+
+        </button>
+
+
+
+        <button class="nav-btn"
+
+                onclick="showPage('stock')">
+
+          📦 Stock
+
+        </button>
+
+
+
+        <button class="nav-btn"
+
+                onclick="showPage('neworder')">
+
+          📝 New Order
+
+        </button>
+
+
+
+        <button class="nav-btn"
+
+                onclick="showPage('myorders')">
+
+          📋 My Orders
+
+        </button>
+
+
+
+        <button id="adminNav"
+
+                class="nav-btn hidden"
+
+                onclick="showPage('admin')">
+
+          🛠 Admin
+
+        </button>
+
+
+
+        <button id="transactionNav"
+
+                class="nav-btn hidden"
+
+                onclick="showPage('transactions')">
+
+          📑 Transactions
+
+        </button>
+
+
+
+        <button class="nav-btn"
+
+                onclick="refreshApp()">
+
+          🔄 Refresh
+
+        </button>
+
+
+
+      </aside>
+
+
+
+
+
+      <main class="main">
+
+
+
+        <!-- DASHBOARD -->
+
+
+
+        <section id="page-dashboard">
+
+
+
+          <h1 class="page-title">
+
+            Dashboard
+
+          </h1>
+
+
+
+
+
+          <div id="adminSetupNotice"
+
+               class="notice hidden">
+
+          </div>
+
+
+
+
+
+          <div class="cards">
+
+
+
+            <div class="card">
+
+              <div class="card-title">
+
+                Total Stock
+
+              </div>
+
+              <div id="statTotal"
+
+                   class="card-value">
+
+                0
+
+              </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+              <div class="card-title">
+
+                Available
+
+              </div>
+
+              <div id="statAvailable"
+
+                   class="card-value">
+
+                0
+
+              </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+              <div class="card-title">
+
+                Low Stock
+
+              </div>
+
+              <div id="statLow"
+
+                   class="card-value">
+
+                0
+
+              </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+              <div class="card-title">
+
+                Out of Stock
+
+              </div>
+
+              <div id="statOut"
+
+                   class="card-value">
+
+                0
+
+              </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+              <div class="card-title">
+
+                Pending Orders
+
+              </div>
+
+              <div id="statPending"
+
+                   class="card-value">
+
+                0
+
+              </div>
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <div class="panel">
+
+
+
+            <h3>
+
+              📦 Recent Stock
+
+            </h3>
+
+
+
+            <div id="dashboardStock"></div>
+
+
+
+          </div>
+
+
+
+        </section>
+
+
+
+
+
+        <!-- STOCK -->
+
+
+
+        <section id="page-stock"
+
+                 class="hidden">
+
+
+
+          <h1 class="page-title">
+
+            Stock
+
+          </h1>
+
+
+
+          <input id="stockSearch"
+
+                 class="search"
+
+                 placeholder="Search item..."
+
+                 oninput="renderStock()">
+
+
+
+          <div class="panel">
+
+
+
+            <div class="table-wrap">
+
+
+
+              <table>
+
+
+
+                <thead>
+
+
+
+                  <tr>
+
+                    <th>Item</th>
+
+                    <th>Category</th>
+
+                    <th>Model</th>
+
+                    <th>Unit</th>
+
+                    <th>Total</th>
+
+                    <th>Available</th>
+
+                    <th>Minimum</th>
+
+                    <th>Location</th>
+
+                  </tr>
+
+
+
+                </thead>
+
+
+
+                <tbody id="stockTable"></tbody>
+
+
+
+              </table>
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <div id="stockManagement"
+
+               class="panel hidden">
+
+
+
+            <h3>
+
+              Stock Management
+
+            </h3>
+
+
+
+            <div class="form-grid">
+
+
+
+              <div class="field">
+
+
+
+                <label>Item</label>
+
+
+
+                <select id="stockItem"></select>
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Purchase Quantity</label>
+
+
+
+                <input id="purchaseQty"
+
+                       type="number"
+
+                       min="1">
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Remark</label>
+
+
+
+                <input id="purchaseRemark">
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+            <button class="btn btn-success"
+
+                    onclick="purchaseStock()">
+
+              + Purchase Stock
+
+            </button>
+
+
+
+
+
+            <hr>
+
+
+
+
+
+            <div class="form-grid">
+
+
+
+              <div class="field">
+
+
+
+                <label>Adjustment Item</label>
+
+
+
+                <select id="adjustItem"></select>
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Adjustment (+ / -)</label>
+
+
+
+                <input id="adjustQty"
+
+                       type="number">
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Remark</label>
+
+
+
+                <input id="adjustRemark">
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+            <button class="btn btn-warning"
+
+                    onclick="adjustStock()">
+
+              Adjust Stock
+
+            </button>
+
+
+
+          </div>
+
+
+
+        </section>
+
+
+
+
+
+        <!-- NEW ORDER -->
+
+
+
+        <section id="page-neworder"
+
+                 class="hidden">
+
+
+
+          <h1 class="page-title">
+
+            New Order
+
+          </h1>
+
+
+
+
+
+          <div class="panel">
+
+
+
+            <div class="form-grid">
+
+
+
+              <div class="field full">
+
+
+
+                <label>Item</label>
+
+
+
+                <select id="orderItem"></select>
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Quantity</label>
+
+
+
+                <input id="orderQty"
+
+                       type="number"
+
+                       min="1"
+
+                       value="1">
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Use Location</label>
+
+
+
+                <input id="useLocation"
+
+                       placeholder="e.g. Radiology">
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Use Date</label>
+
+
+
+                <input id="useDate"
+
+                       type="date">
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field">
+
+
+
+                <label>Purpose</label>
+
+
+
+                <input id="purpose"
+
+                       placeholder="Reason for request">
+
+
+
+              </div>
+
+
+
+
+
+              <div class="field full">
+
+
+
+                <label>Remark</label>
+
+
+
+                <textarea id="orderRemark"></textarea>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+            <button class="btn btn-primary"
+
+                    onclick="createOrder()">
+
+              Submit Order
+
+            </button>
+
+
+
+          </div>
+
+
+
+        </section>
+
+
+
+
+
+        <!-- MY ORDERS -->
+
+
+
+        <section id="page-myorders"
+
+                 class="hidden">
+
+
+
+          <h1 class="page-title">
+
+            My Orders
+
+          </h1>
+
+
+
+
+
+          <div class="panel">
+
+
+
+            <div class="table-wrap">
+
+
+
+              <table>
+
+
+
+                <thead>
+
+
+
+                  <tr>
+
+                    <th>Request</th>
+
+                    <th>Date</th>
+
+                    <th>Item</th>
+
+                    <th>Qty</th>
+
+                    <th>Location</th>
+
+                    <th>Status</th>
+
+                  </tr>
+
+
+
+                </thead>
+
+
+
+                <tbody id="myOrdersTable"></tbody>
+
+
+
+              </table>
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+        </section>
+
+
+
+
+
+        <!-- ADMIN -->
+
+
+
+        <section id="page-admin"
+
+                 class="hidden">
+
+
+
+          <h1 class="page-title">
+
+            Admin
+
+          </h1>
+
+
+
+
+
+          <div class="panel">
+
+
+
+            <h3>
+
+              Pending Orders
+
+            </h3>
+
+
+
+
+
+            <div class="table-wrap">
+
+
+
+              <table>
+
+
+
+                <thead>
+
+
+
+                  <tr>
+
+                    <th>Request</th>
+
+                    <th>Staff</th>
+
+                    <th>Department</th>
+
+                    <th>Item</th>
+
+                    <th>Qty</th>
+
+                    <th>Location</th>
+
+                    <th>Purpose</th>
+
+                    <th>Action</th>
+
+                  </tr>
+
+
+
+                </thead>
+
+
+
+                <tbody id="pendingTable"></tbody>
+
+
+
+              </table>
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+        </section>
+
+
+
+
+
+        <!-- TRANSACTIONS -->
+
+
+
+        <section id="page-transactions"
+
+                 class="hidden">
+
+
+
+          <h1 class="page-title">
+
+            Transactions
+
+          </h1>
+
+
+
+
+
+          <div class="panel">
+
+
+
+            <div class="table-wrap">
+
+
+
+              <table>
+
+
+
+                <thead>
+
+
+
+                  <tr>
+
+                    <th>Date</th>
+
+                    <th>Type</th>
+
+                    <th>Request</th>
+
+                    <th>Item</th>
+
+                    <th>Qty</th>
+
+                    <th>User</th>
+
+                    <th>Location</th>
+
+                    <th>Remark</th>
+
+                  </tr>
+
+
+
+                </thead>
+
+
+
+                <tbody id="transactionsTable"></tbody>
+
+
+
+              </table>
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+        </section>
+
+
+
+      </main>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+<script>
+
+
+
+/* =================================================
+   TELEGRAM MINI APP AUTH
+   Final Apps Script-compatible version
+================================================= */
+
+const tg =
+  window.Telegram && window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
+
+let INIT_DATA = '';
+
+/* =================================================
+   APPS SCRIPT API BRIDGE
+   This page is hosted on GitHub Pages (or another static HTTPS host).
+   It emulates google.script.run and sends calls to the Apps Script
+   backend through JSONP, so the existing UI code does not need to be
+   rewritten function-by-function.
+   ================================================= */
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxu7muEgAjwpXg4P1H-vD7uF6gP4rY8-9hfrzf_yjkxa9ms2dPUDpTdcO543181F-TW/exec';
+
+(function installGoogleScriptRunBridge() {
+  let successHandler = null;
+  let failureHandler = null;
+
+  function callApi(action, args) {
+    if (!GAS_API_URL || GAS_API_URL.indexOf('PASTE_YOUR_') === 0) {
+      const err = new Error('Apps Script API URL is not configured in Index.html.');
+      if (failureHandler) failureHandler(err);
+      successHandler = null;
+      failureHandler = null;
+      return;
+    }
+
+    const callbackName = '__gas_jsonp_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const params = new URLSearchParams();
+    params.set('action', action);
+    params.set('callback', callbackName);
+
+    args.forEach(function(arg, i) {
+      if (typeof arg === 'object' && arg !== null) {
+        params.set('arg' + i, JSON.stringify(arg));
+      } else {
+        params.set('arg' + i, String(arg == null ? '' : arg));
+      }
+    });
+
+    const script = document.createElement('script');
+    let finished = false;
+
+    function cleanup() {
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+    }
+
+    function fail(message) {
+      if (finished) return;
+      finished = true;
+      cleanup();
+      const fn = failureHandler;
+      successHandler = null;
+      failureHandler = null;
+      if (fn) fn(new Error(message || 'Apps Script API request failed.'));
+    }
+
+    window[callbackName] = function(response) {
+      if (finished) return;
+      finished = true;
+      cleanup();
+
+      const ok = response && response.ok !== false;
+      const data = response && Object.prototype.hasOwnProperty.call(response, 'data')
+        ? response.data
+        : response;
+
+      const okFn = successHandler;
+      const failFn = failureHandler;
+      successHandler = null;
+      failureHandler = null;
+
+      if (ok) {
+        if (okFn) okFn(data);
+      } else {
+        if (failFn) failFn(new Error((response && response.error) || 'Apps Script API error.'));
+      }
+    };
+
+    script.onerror = function() {
+      fail('Cannot connect to Apps Script backend. Check the Web App URL and deployment.');
+    };
+
+    script.src = GAS_API_URL + (GAS_API_URL.indexOf('?') >= 0 ? '&' : '?') + params.toString();
+    document.head.appendChild(script);
+  }
+
+  const runProxy = new Proxy({}, {
+    get: function(target, prop) {
+      if (prop === 'withSuccessHandler') {
+        return function(fn) { successHandler = fn; return runProxy; };
+      }
+      if (prop === 'withFailureHandler') {
+        return function(fn) { failureHandler = fn; return runProxy; };
+      }
+      if (typeof prop === 'symbol') return undefined;
+      return function() { callApi(String(prop), Array.prototype.slice.call(arguments)); };
+    }
+  });
+
+  window.google = window.google || {};
+  window.google.script = window.google.script || {};
+  window.google.script.run = runProxy;
+})();
+
+function extractTelegramDataFromText(text) {
+  if (!text) return '';
+
+  // Telegram normally places launch data in tgWebAppData.
+  const m = text.match(/(?:^|[?#&])tgWebAppData=([^&#]*)/);
+  if (!m) return '';
+
+  try {
+    // Use decodeURIComponent instead of URLSearchParams so '+' inside
+    // Telegram's signed data is not accidentally changed to a space.
+    return decodeURIComponent(m[1]);
+  } catch (e) {
+    return '';
+  }
+}
+
+function prepareTelegram() {
+  if (!tg) return false;
+
+  try { tg.ready(); } catch (e) {}
+  try { tg.expand(); } catch (e) {}
+  try { tg.setHeaderColor('#126b2c'); } catch (e) {}
+
+  INIT_DATA = tg.initData || '';
+  return !!INIT_DATA;
+}
+
+function tryGetTelegramDataFromAppsScriptLocation(done) {
+  // Apps Script HTML Service runs the page in a sandboxed iframe.
+  // google.script.url.getLocation() is the supported way to read the
+  // web-app URL parameters/fragment from that iframe.
+  if (window.google && google.script && google.script.url &&
+      typeof google.script.url.getLocation === 'function') {
+    try {
+      google.script.url.getLocation(function(location) {
+        let data = '';
+
+        if (location) {
+          data = extractTelegramDataFromText(location.hash || '');
+
+          if (!data && location.parameter) {
+            const raw = location.parameter.tgWebAppData || '';
+            if (raw) {
+              try { data = decodeURIComponent(raw); } catch (e) { data = raw; }
+            }
+          }
+        }
+
+        if (data) INIT_DATA = data;
+        done(!!INIT_DATA);
+      });
+      return;
+    } catch (e) {}
+  }
+
+  done(!!INIT_DATA);
+}
+
+function waitForTelegramInitData(done) {
+  let attempts = 0;
+
+  function check() {
+    attempts++;
+
+    if (prepareTelegram()) {
+      done(true);
+      return;
+    }
+
+    tryGetTelegramDataFromAppsScriptLocation(function(ok) {
+      if (ok) {
+        done(true);
+        return;
+      }
+
+      // Also check the iframe's own URL in case Apps Script exposes it there.
+      const direct = extractTelegramDataFromText(
+        (window.location && (window.location.hash || window.location.search)) || ''
+      );
+      if (direct) {
+        INIT_DATA = direct;
+        done(true);
+        return;
+      }
+
+      if (attempts >= 30) {
+        done(false);
+        return;
+      }
+
+      setTimeout(check, 200);
+    });
+  }
+
+  check();
+}
+
+/* =================================================
+  APP STATE
+================================================= */
+
+let APP = {
+  user: null,
+  items: [],
+  myOrders: [],
+  pendingOrders: [],
+  stats: {}
+};
+
+/* =================================================
+  START
+================================================= */
+
+document.addEventListener('DOMContentLoaded', function() {
+  const dateEl = document.getElementById('useDate');
+  if (dateEl) dateEl.value = new Date().toISOString().split('T')[0];
+
+  if (!tg) {
+    showError('សូមបើក Hospital IT Stock ពី Telegram Mini App។');
+    return;
+  }
+
+  showLoading(true);
+  waitForTelegramInitData(function(ok) {
+    if (!ok) {
+      showLoading(false);
+      showError('Telegram authentication data មិនមាន។ សូមបិទ App ហើយបើកតាម Telegram → Open App ម្តងទៀត។');
+      return;
+    }
+    loadApp();
+  });
+});
+
+/* =================================================
+  SERVER CALL
+================================================= */
+
+function loadApp() {
+  showLoading(true);
+  google.script.run
+    .withSuccessHandler(function(data) {
+      APP = data;
+      renderApp();
+      showLoading(false);
+    })
+    .withFailureHandler(function(error) {
+      showLoading(false);
+      showError(error.message || String(error));
+    })
+    .getAppDataFromTelegram(INIT_DATA);
+}
+
+/* =================================================
+
+   RENDER APP
+
+================================================= */
+
+
+
+function renderApp() {
+
+
+
+  document.getElementById('app')
+
+    .classList.remove('hidden');
+
+
+
+
+
+  document.getElementById('userName')
+
+    .textContent =
+
+      APP.user.name || 'User';
+
+
+
+
+
+  document.getElementById('userRole')
+
+    .textContent =
+
+      APP.user.role || 'STAFF';
+
+
+
+
+
+  document.getElementById('statTotal')
+
+    .textContent =
+
+      APP.stats.totalItems || 0;
+
+
+
+
+
+  document.getElementById('statAvailable')
+
+    .textContent =
+
+      APP.stats.totalAvailable || 0;
+
+
+
+
+
+  document.getElementById('statLow')
+
+    .textContent =
+
+      APP.stats.lowStock || 0;
+
+
+
+
+
+  document.getElementById('statOut')
+
+    .textContent =
+
+      APP.stats.outOfStock || 0;
+
+
+
+
+
+  document.getElementById('statPending')
+
+    .textContent =
+
+      APP.stats.pendingOrders || 0;
+
+
+
+
+
+  if (
+
+    APP.user.role === 'ADMIN' ||
+
+    APP.user.role === 'STORE'
+
+  ) {
+
+
+
+    document.getElementById('adminNav')
+
+      .classList.remove('hidden');
+
+
+
+    document.getElementById('transactionNav')
+
+      .classList.remove('hidden');
+
+
+
+    document.getElementById('stockManagement')
+
+      .classList.remove('hidden');
+
+
+
+  }
+
+
+
+
+
+  // Show Telegram ID if not ADMIN
+
+  if (APP.user.role !== 'ADMIN') {
+
+
+
+    const notice =
+
+      document.getElementById(
+
+        'adminSetupNotice'
+
+      );
+
+
+
+    notice.classList.remove('hidden');
+
+
+
+    notice.innerHTML =
+
+      '<b>Telegram Account</b><br><br>' +
+
+      'Name: ' +
+
+      escapeHtml(APP.user.name) +
+
+      '<br>' +
+
+      'Telegram ID: ' +
+
+      '<span class="telegram-id">' +
+
+      escapeHtml(APP.user.telegramId) +
+
+      '</span>' +
+
+      '<br><br>' +
+
+      'បើនេះជា Account របស់អ្នកដែលត្រូវជា ADMIN ' +
+
+      'សូមដាក់ Telegram ID ខាងលើទៅក្នុង ' +
+
+      '<b>SETTINGS → ADMIN_TELEGRAM_ID</b> ' +
+
+      'រួច Refresh App។';
+
+
+
+  }
+
+
+
+
+
+  renderStock();
+
+  renderOrderItems();
+
+  renderMyOrders();
+
+  renderPendingOrders();
+
+  renderDashboardStock();
+
+
+
+}
+
+
+
+
+
+/* =================================================
+
+   PAGE NAVIGATION
+
+================================================= */
+
+
+
+function showPage(page) {
+
+
+
+  const pages = [
+
+    'dashboard',
+
+    'stock',
+
+    'neworder',
+
+    'myorders',
+
+    'admin',
+
+    'transactions'
+
+  ];
+
+
+
+
+
+  pages.forEach(function(name) {
+
+
+
+    const element =
+
+      document.getElementById(
+
+        'page-' + name
+
+      );
+
+
+
+    if (element) {
+
+
+
+      element.classList.toggle(
+
+        'hidden',
+
+        name !== page
+
+      );
+
+    }
+
+  });
+
+
+
+
+
+  document.querySelectorAll(
+
+    '.nav-btn'
+
+  ).forEach(function(btn) {
+
+    btn.classList.remove('active');
+
+  });
+
+
+
+
+
+  if (page === 'transactions') {
+
+    loadTransactions();
+
+  }
+
+}
+
+
+
+
+
+/* =================================================
+
+   STOCK
+
+================================================= */
+
+
+
+function renderStock() {
+
+
+
+  const tbody =
+
+    document.getElementById(
+
+      'stockTable'
+
+    );
+
+
+
+  const search =
+
+    (
+
+      document.getElementById(
+
+        'stockSearch'
+
+      ).value || ''
+
+    )
+
+    .toLowerCase();
+
+
+
+
+
+  const items =
+
+    APP.items.filter(function(item) {
+
+
+
+      return (
+
+        String(item.itemName)
+
+          .toLowerCase()
+
+          .includes(search) ||
+
+
+
+        String(item.model)
+
+          .toLowerCase()
+
+          .includes(search) ||
+
+
+
+        String(item.category)
+
+          .toLowerCase()
+
+          .includes(search)
+
+      );
+
+
+
+    });
+
+
+
+
+
+  if (!items.length) {
+
+
+
+    tbody.innerHTML =
+
+      '<tr><td colspan="8" class="empty">' +
+
+      'No stock found.' +
+
+      '</td></tr>';
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  tbody.innerHTML =
+
+    items.map(function(item) {
+
+
+
+      let rowClass = '';
+
+
+
+      if (item.availableQty <= 0) {
+
+        rowClass = 'out';
+
+      } else if (
+
+        item.availableQty <= item.minimumQty
+
+      ) {
+
+        rowClass = 'low';
+
+      }
+
+
+
+
+
+      return `
+
+        <tr class="${rowClass}">
+
+          <td><b>${escapeHtml(item.itemName)}</b></td>
+
+          <td>${escapeHtml(item.category)}</td>
+
+          <td>${escapeHtml(item.model)}</td>
+
+          <td>${escapeHtml(item.unit)}</td>
+
+          <td>${item.totalQty}</td>
+
+          <td><b>${item.availableQty}</b></td>
+
+          <td>${item.minimumQty}</td>
+
+          <td>${escapeHtml(item.storeLocation)}</td>
+
+        </tr>
+
+      `;
+
+
+
+    }).join('');
+
+
+
+
+
+  fillStockSelects();
+
+}
+
+
+
+
+
+/* =================================================
+
+   SELECT ITEMS
+
+================================================= */
+
+
+
+function fillStockSelects() {
+
+
+
+  const selects = [
+
+    document.getElementById('stockItem'),
+
+    document.getElementById('adjustItem')
+
+  ];
+
+
+
+
+
+  selects.forEach(function(select) {
+
+
+
+    if (!select) return;
+
+
+
+
+
+    select.innerHTML =
+
+      APP.items.map(function(item) {
+
+
+
+        return `
+
+          <option value="${escapeAttr(item.itemId)}">
+
+            ${escapeHtml(item.itemName)}
+
+            (${item.availableQty} available)
+
+          </option>
+
+        `;
+
+
+
+      }).join('');
+
+  });
+
+}
+
+
+
+
+
+function renderOrderItems() {
+
+
+
+  const select =
+
+    document.getElementById(
+
+      'orderItem'
+
+    );
+
+
+
+
+
+  select.innerHTML =
+
+    APP.items.map(function(item) {
+
+
+
+      return `
+
+        <option value="${escapeAttr(item.itemId)}">
+
+          ${escapeHtml(item.itemName)}
+
+          — Available: ${item.availableQty}
+
+        </option>
+
+      `;
+
+
+
+    }).join('');
+
+}
+
+
+
+
+
+/* =================================================
+
+   CREATE ORDER
+
+================================================= */
+
+
+
+function createOrder() {
+
+
+
+  const itemId =
+
+    document.getElementById(
+
+      'orderItem'
+
+    ).value;
+
+
+
+
+
+  const quantity =
+
+    Number(
+
+      document.getElementById(
+
+        'orderQty'
+
+      ).value
+
+    );
+
+
+
+
+
+  const useLocation =
+
+    document.getElementById(
+
+      'useLocation'
+
+    ).value;
+
+
+
+
+
+  const useDate =
+
+    document.getElementById(
+
+      'useDate'
+
+    ).value;
+
+
+
+
+
+  const purpose =
+
+    document.getElementById(
+
+      'purpose'
+
+    ).value;
+
+
+
+
+
+  const remark =
+
+    document.getElementById(
+
+      'orderRemark'
+
+    ).value;
+
+
+
+
+
+  if (!quantity || quantity <= 0) {
+
+
+
+    alert(
+
+      'Please enter a valid quantity.'
+
+    );
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  const data = {
+
+    itemId: itemId,
+
+    quantity: quantity,
+
+    useLocation: useLocation,
+
+    useDate: useDate,
+
+    purpose: purpose,
+
+    remark: remark
+
+  };
+
+
+
+
+
+  showLoading(true);
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function(order) {
+
+
+
+      APP.myOrders.unshift(order);
+
+
+
+      document.getElementById(
+
+        'orderQty'
+
+      ).value = 1;
+
+
+
+      document.getElementById(
+
+        'useLocation'
+
+      ).value = '';
+
+
+
+      document.getElementById(
+
+        'purpose'
+
+      ).value = '';
+
+
+
+      document.getElementById(
+
+        'orderRemark'
+
+      ).value = '';
+
+
+
+
+
+      renderMyOrders();
+
+
+
+      showLoading(false);
+
+
+
+
+
+      alert(
+
+        '✅ Order submitted successfully.\n\n' +
+
+        'Request ID: ' +
+
+        order.requestId
+
+      );
+
+
+
+
+
+      showPage('myorders');
+
+
+
+      refreshApp(false);
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .createOrderFromTelegram(
+
+      data,
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   MY ORDERS
+
+================================================= */
+
+
+
+function renderMyOrders() {
+
+
+
+  const tbody =
+
+    document.getElementById(
+
+      'myOrdersTable'
+
+    );
+
+
+
+
+
+  if (!APP.myOrders.length) {
+
+
+
+    tbody.innerHTML =
+
+      '<tr><td colspan="6" class="empty">' +
+
+      'No orders yet.' +
+
+      '</td></tr>';
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  tbody.innerHTML =
+
+    APP.myOrders.map(function(order) {
+
+
+
+      return `
+
+        <tr>
+
+          <td>${escapeHtml(order.requestId)}</td>
+
+          <td>${formatDate(order.createdAt)}</td>
+
+          <td>${escapeHtml(order.itemName)}</td>
+
+          <td>${order.quantity}</td>
+
+          <td>${escapeHtml(order.useLocation)}</td>
+
+          <td>${statusBadge(order.status)}</td>
+
+        </tr>
+
+      `;
+
+
+
+    }).join('');
+
+}
+
+
+
+
+
+/* =================================================
+
+   ADMIN
+
+================================================= */
+
+
+
+function renderPendingOrders() {
+
+
+
+  const tbody =
+
+    document.getElementById(
+
+      'pendingTable'
+
+    );
+
+
+
+
+
+  if (
+
+    APP.user.role !== 'ADMIN' &&
+
+    APP.user.role !== 'STORE'
+
+  ) {
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  if (!APP.pendingOrders.length) {
+
+
+
+    tbody.innerHTML =
+
+      '<tr><td colspan="8" class="empty">' +
+
+      'No pending orders.' +
+
+      '</td></tr>';
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  tbody.innerHTML =
+
+    APP.pendingOrders.map(function(order) {
+
+
+
+      return `
+
+        <tr>
+
+
+
+          <td>
+
+            <b>${escapeHtml(order.requestId)}</b>
+
+          </td>
+
+
+
+          <td>
+
+            ${escapeHtml(order.staffName)}
+
+          </td>
+
+
+
+          <td>
+
+            ${escapeHtml(order.department || '-')}
+
+          </td>
+
+
+
+          <td>
+
+            ${escapeHtml(order.itemName)}
+
+          </td>
+
+
+
+          <td>
+
+            ${order.quantity}
+
+          </td>
+
+
+
+          <td>
+
+            ${escapeHtml(order.useLocation || '-')}
+
+          </td>
+
+
+
+          <td>
+
+            ${escapeHtml(order.purpose || '-')}
+
+          </td>
+
+
+
+          <td>
+
+
+
+            <button
+
+              class="btn btn-success"
+
+              onclick="approveOrder('${escapeAttr(order.requestId)}')">
+
+              Approve
+
+            </button>
+
+
+
+            <button
+
+              class="btn btn-danger"
+
+              onclick="rejectOrder('${escapeAttr(order.requestId)}')">
+
+              Reject
+
+            </button>
+
+
+
+          </td>
+
+
+
+        </tr>
+
+      `;
+
+
+
+    }).join('');
+
+}
+
+
+
+
+
+/* =================================================
+
+   APPROVE
+
+================================================= */
+
+
+
+function approveOrder(requestId) {
+
+
+
+  if (
+
+    !confirm(
+
+      'Approve this order?'
+
+    )
+
+  ) {
+
+    return;
+
+  }
+
+
+
+
+
+  showLoading(true);
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function() {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '✅ Order approved.'
+
+      );
+
+
+
+      refreshApp(false);
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .approveOrderFromTelegram(
+
+      requestId,
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   REJECT
+
+================================================= */
+
+
+
+function rejectOrder(requestId) {
+
+
+
+  const reason =
+
+    prompt(
+
+      'Enter rejection reason:'
+
+    );
+
+
+
+
+
+  if (reason === null) {
+
+    return;
+
+  }
+
+
+
+
+
+  showLoading(true);
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function() {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        'Order rejected.'
+
+      );
+
+
+
+      refreshApp(false);
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .rejectOrderFromTelegram(
+
+      requestId,
+
+      reason,
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   PURCHASE
+
+================================================= */
+
+
+
+function purchaseStock() {
+
+
+
+  const data = {
+
+
+
+    itemId:
+
+      document.getElementById(
+
+        'stockItem'
+
+      ).value,
+
+
+
+    quantity:
+
+      Number(
+
+        document.getElementById(
+
+          'purchaseQty'
+
+        ).value
+
+      ),
+
+
+
+    remark:
+
+      document.getElementById(
+
+        'purchaseRemark'
+
+      ).value
+
+
+
+  };
+
+
+
+
+
+  if (!data.quantity || data.quantity <= 0) {
+
+
+
+    alert(
+
+      'Enter purchase quantity.'
+
+    );
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  showLoading(true);
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function() {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '✅ Stock purchased.'
+
+      );
+
+
+
+      refreshApp(false);
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .purchaseStockFromTelegram(
+
+      data,
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   ADJUST
+
+================================================= */
+
+
+
+function adjustStock() {
+
+
+
+  const data = {
+
+
+
+    itemId:
+
+      document.getElementById(
+
+        'adjustItem'
+
+      ).value,
+
+
+
+    delta:
+
+      Number(
+
+        document.getElementById(
+
+          'adjustQty'
+
+        ).value
+
+      ),
+
+
+
+    remark:
+
+      document.getElementById(
+
+        'adjustRemark'
+
+      ).value
+
+
+
+  };
+
+
+
+
+
+  if (!data.delta) {
+
+
+
+    alert(
+
+      'Enter adjustment quantity.'
+
+    );
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  showLoading(true);
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function() {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '✅ Stock adjusted.'
+
+      );
+
+
+
+      refreshApp(false);
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .adjustStockFromTelegram(
+
+      data,
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   TRANSACTIONS
+
+================================================= */
+
+
+
+function loadTransactions() {
+
+
+
+  if (
+
+    APP.user.role !== 'ADMIN' &&
+
+    APP.user.role !== 'STORE' &&
+
+    APP.user.role !== 'VIEWER'
+
+  ) {
+
+    return;
+
+  }
+
+
+
+
+
+  showLoading(true);
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function(rows) {
+
+
+
+      showLoading(false);
+
+
+
+      const tbody =
+
+        document.getElementById(
+
+          'transactionsTable'
+
+        );
+
+
+
+
+
+      if (!rows.length) {
+
+
+
+        tbody.innerHTML =
+
+          '<tr><td colspan="8" class="empty">' +
+
+          'No transactions.' +
+
+          '</td></tr>';
+
+
+
+        return;
+
+      }
+
+
+
+
+
+      tbody.innerHTML =
+
+        rows.map(function(row) {
+
+
+
+          return `
+
+            <tr>
+
+
+
+              <td>
+
+                ${formatDate(row.date)}
+
+              </td>
+
+
+
+              <td>
+
+                <b>${escapeHtml(row.type)}</b>
+
+              </td>
+
+
+
+              <td>
+
+                ${escapeHtml(row.requestId || '-')}
+
+              </td>
+
+
+
+              <td>
+
+                ${escapeHtml(row.itemName)}
+
+              </td>
+
+
+
+              <td>
+
+                ${row.quantity}
+
+              </td>
+
+
+
+              <td>
+
+                ${escapeHtml(row.userName)}
+
+              </td>
+
+
+
+              <td>
+
+                ${escapeHtml(row.location || '-')}
+
+              </td>
+
+
+
+              <td>
+
+                ${escapeHtml(row.remark || '-')}
+
+              </td>
+
+
+
+            </tr>
+
+          `;
+
+
+
+        }).join('');
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      showLoading(false);
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .getTransactionsFromTelegram(
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   DASHBOARD STOCK
+
+================================================= */
+
+
+
+function renderDashboardStock() {
+
+
+
+  const container =
+
+    document.getElementById(
+
+      'dashboardStock'
+
+    );
+
+
+
+
+
+  const items =
+
+    APP.items.slice(0, 10);
+
+
+
+
+
+  if (!items.length) {
+
+
+
+    container.innerHTML =
+
+      '<div class="empty">' +
+
+      'No stock.' +
+
+      '</div>';
+
+
+
+    return;
+
+  }
+
+
+
+
+
+  container.innerHTML =
+
+    '<div class="table-wrap">' +
+
+    '<table>' +
+
+    '<thead>' +
+
+    '<tr>' +
+
+    '<th>Item</th>' +
+
+    '<th>Total</th>' +
+
+    '<th>Available</th>' +
+
+    '<th>Status</th>' +
+
+    '</tr>' +
+
+    '</thead>' +
+
+    '<tbody>' +
+
+
+
+    items.map(function(item) {
+
+
+
+      let status = 'OK';
+
+
+
+      if (item.availableQty <= 0) {
+
+        status = 'OUT';
+
+      } else if (
+
+        item.availableQty <= item.minimumQty
+
+      ) {
+
+        status = 'LOW';
+
+      }
+
+
+
+
+
+      return `
+
+        <tr>
+
+          <td>${escapeHtml(item.itemName)}</td>
+
+          <td>${item.totalQty}</td>
+
+          <td>${item.availableQty}</td>
+
+          <td>${status}</td>
+
+        </tr>
+
+      `;
+
+
+
+    }).join('') +
+
+
+
+    '</tbody>' +
+
+    '</table>' +
+
+    '</div>';
+
+}
+
+
+
+
+
+/* =================================================
+
+   REFRESH
+
+================================================= */
+
+
+
+function refreshApp(showLoader = true) {
+
+
+
+  if (showLoader) {
+
+    showLoading(true);
+
+  }
+
+
+
+
+
+  google.script.run
+
+    .withSuccessHandler(function(data) {
+
+
+
+      APP = data;
+
+
+
+      renderApp();
+
+
+
+      if (showLoader) {
+
+        showLoading(false);
+
+      }
+
+
+
+    })
+
+    .withFailureHandler(function(error) {
+
+
+
+      if (showLoader) {
+
+        showLoading(false);
+
+      }
+
+
+
+      alert(
+
+        '❌ ' +
+
+        (
+
+          error.message ||
+
+          String(error)
+
+        )
+
+      );
+
+
+
+    })
+
+    .getAppDataFromTelegram(
+
+      INIT_DATA
+
+    );
+
+}
+
+
+
+
+
+/* =================================================
+
+   UI HELPERS
+
+================================================= */
+
+
+
+function statusBadge(status) {
+
+
+
+  const s =
+
+    String(status || '')
+
+      .toUpperCase();
+
+
+
+
+
+  let cls = 'pending';
+
+
+
+  if (s === 'APPROVED') {
+
+    cls = 'approved';
+
+  }
+
+
+
+  if (s === 'REJECTED') {
+
+    cls = 'rejected';
+
+  }
+
+
+
+
+
+  return `
+
+    <span class="badge ${cls}">
+
+      ${escapeHtml(s)}
+
+    </span>
+
+  `;
+
+}
+
+
+
+
+
+function formatDate(value) {
+
+
+
+  if (!value) return '-';
+
+
+
+  const d =
+
+    new Date(value);
+
+
+
+  if (isNaN(d.getTime())) {
+
+    return value;
+
+  }
+
+
+
+
+
+  return d.toLocaleString();
+
+}
+
+
+
+
+
+function escapeHtml(value) {
+
+
+
+  return String(value ?? '')
+
+    .replace(/&/g, '&amp;')
+
+    .replace(/</g, '&lt;')
+
+    .replace(/>/g, '&gt;')
+
+    .replace(/"/g, '&quot;')
+
+    .replace(/'/g, '&#039;');
+
+}
+
+
+
+
+
+function escapeAttr(value) {
+
+
+
+  return String(value ?? '')
+
+    .replace(/'/g, '&#039;')
+
+    .replace(/"/g, '&quot;');
+
+}
+
+
+
+
+
+function showLoading(show) {
+
+
+
+  document.getElementById(
+
+    'loading'
+
+  ).classList.toggle(
+
+    'hidden',
+
+    !show
+
+  );
+
+}
+
+
+
+
+
+function showError(message) {
+
+
+
+  const error =
+
+    document.getElementById(
+
+      'error'
+
+    );
+
+
+
+  error.classList.remove(
+
+    'hidden'
+
+  );
+
+
+
+  error.innerHTML =
+
+    '<b>⚠️ Hospital IT Stock</b><br><br>' +
+
+    escapeHtml(message);
+
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
